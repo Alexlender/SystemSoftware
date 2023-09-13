@@ -1,0 +1,1 @@
+awk -F"\t" '{print $1}' kill_list | xargs -I x sed -i '/x/d' students
