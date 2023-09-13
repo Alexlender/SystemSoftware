@@ -1,0 +1,1 @@
+grep os-prober journal_example.log | grep sda1
