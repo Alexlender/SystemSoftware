@@ -24,7 +24,7 @@ int main(){
 				  cin.ignore(10000, '\n');
 				  getline(cin, command);
 				  if(fork() == 0)
-				  	if(execl(("/bin/" + command).c_str(), NULL) == -1)
+				  	if(execlp(command.c_str(), NULL) == -1)
 						exit(1);
 	  			  wait(&status);
 				  if(status != 0)
@@ -32,7 +32,7 @@ int main(){
 				  break;
 			case '2': cout << "Запускается на исполнение файл со сценарием" << endl;
 				  if(fork() == 0)
-                                        if(execl("/bin/sh", "sh", "lab1.sh", NULL) == -1)
+                                        if(execlp("sh", "sh", "lab1.sh", NULL) == -1)
                                                 exit(1);
                                   wait(&status);
                                   if(status != 0)
@@ -42,7 +42,7 @@ int main(){
 				  cin.ignore(1000, '\n');
 				  getline(cin, command);
 				  if(fork() == 0)
-                                        if(execl("/bin/pkill", "pkill", command.c_str(), NULL) == -1)
+                                        if(execlp("pkill", "pkill", command.c_str(), NULL) == -1)
                                                 exit(1);
                                   wait(&status);
                                   if(status != 0)
