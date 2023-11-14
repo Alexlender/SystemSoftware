@@ -6,7 +6,6 @@ using namespace std;
 enum Color { white, black };
 enum FType { pawn, knight, bishop, rook, queen, king};
 
-
 class Figure{
 public:
         Figure(Color col, FType t){
@@ -43,7 +42,7 @@ private:
 
 public:
 	Figure* figure;
-	void setCord(vector<char> cords){
+	void setCords(vector<char> cords){
 		if(cords[0] >= 'a' && cords[0] <= 'h'){
                         let = cords[0];
                         if(cords[1] >= '1' && cords[1] <= '8')
@@ -58,7 +57,7 @@ public:
 	};
 
 	Cell(vector<char> cords){
-		setCord(cords);
+		setCords(cords);
 	};
 
 	vector<char> getCords(){
@@ -83,7 +82,7 @@ class Field{
 		for(int i = 0; i < 8; i++){
 			cells[i] = new Cell[8];
 			for(int j = 0; j < 8; j++){
-				cells[i][j] = Cell({'e','2'});
+				cells[i][j].setCords({(char)('a' + j), (char)('1' + i)});
 				Figure fg = Figure(Color::white, FType::pawn);
 				cells[i][j].figure = &fg;
 			}
