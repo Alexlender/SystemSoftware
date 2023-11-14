@@ -22,6 +22,21 @@ public:
 			case FType::pawn:
 				return 'p';
 				break;
+			case FType::knight:
+                                return 'k';
+                                break;
+			case FType::bishop:
+                                return 'b';
+                                break;
+			case FType::rook:
+                                return 'r';
+                                break;
+			case FType::queen:
+                                return 'Q';
+                                break;
+			case FType::king:
+                                return 'K';
+                                break;
 			default:
 				return '*';
 	}
@@ -60,6 +75,11 @@ public:
 		setCords(cords);
 	};
 
+	~Cell(){
+		if(figure)
+			delete figure;
+	};
+
 	vector<char> getCords(){
 		return vector<char> {let, num};
 	};
@@ -78,13 +98,44 @@ class Field{
 //public:
 	Field(){
 		cells = new Cell*[8];
-		int i = 0;
 		for(int i = 0; i < 8; i++){
 			cells[i] = new Cell[8];
 			for(int j = 0; j < 8; j++){
-				cells[i][j].setCords({(char)('a' + j), (char)('1' + i)});
-				Figure fg = Figure(Color::white, FType::pawn);
-				cells[i][j].figure = &fg;
+				char let = (char)('a' + j);
+				char num = (char)('1' + i);
+				cells[i][j].setCords({let, num});
+
+				if(num == '1' || num == '2' || num == '7' || num == '8'){
+					
+					
+                                Color col;
+                                FType type;
+
+                                if(num == '2' || num == '7')
+                                        type = FType::pawn;
+                                else if(let == 'a' || let == 'h'){
+					cout << "GGG" << i << j << "GGG";
+                                        type == FType::rook;
+				}
+                                else if(let == 'b' || let == 'g')
+                                        type == FType::knight;
+                                else if(let == 'c' || let == 'f')
+                                        type == FType::bishop;
+                                else if(let == 'd')
+                                        type == FType::queen;
+                                else if(let == 'e')
+                                        type == FType::king;
+
+
+                                	if(num == '1' || num == '2')
+                                        	col = Color::white;
+                                	else if(num == '8' || num == '7')
+                                        	col = Color::black;
+					cout << i << j << let << num << ' ' << type << ' ' << col << endl;
+				
+					cells[i][j].figure = new Figure(col, type);
+					
+				}
 			}
 		}
 				
@@ -101,7 +152,7 @@ class Field{
 		for(int i = 0; i < 8; i++){
 			for(int j = 0; j < 8; j++){
 				//Cell cell = cells[i][j];
-				cout << cells[i][j].print() << cells[i][j].getCords()[0];
+				cout << cells[i][j].print() << cells[i][j].getCords()[0] << cells[i][j].getCords()[1];
 			}
 			cout << endl;
 		}
@@ -116,9 +167,7 @@ int main(){
 
 	Field fd;
 	fd.print();
-
-	fd.cells[0][0].figure = &fg;
-
+	fd.cells[7][4].figure->type = FType::king;
 	fd.print();
 	return 0;
 }
