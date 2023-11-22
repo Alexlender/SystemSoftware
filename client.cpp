@@ -3,36 +3,53 @@
 #include <sys/types.h>
 #include <sys/socket.h>
 #include <netinet/in.h>
+#include <arpa/inet.h>
+#include <iostream>
+#include <unistd.h>
+
+
+using namespace std;
+
 int main(){
 	int sd,num ; 
-	char buf[60] ; //для посылки и получения данных
-	sprintf(buf,"Привет!") ;
+
+	const char ADDR[] = "77.246.159.31";
+
+	struct in_addr addr;
+
+	inet_pton(AF_INET, ADDR, &addr);
+
+	char buf[128];
 	struct sockaddr_in saddr ; //адрес сервера
 	bzero(&saddr, sizeof(saddr)) ; //очистить адрес
 	saddr.sin_family=AF_INET ;
-	saddr.sin_port = 199;
-	saddr.sin_addr.s_addr=INADDR_ANY;
+	saddr.sin_port = htons(9199);
+	saddr.sin_addr = addr;
 	       
-	sd=socket(AF_INET, SOCK_STREAM, 0);
+	sd=socket(AF_INET, SOCK_STREAM, IPPROTO_TCP);
 	if (sd<0) { 
-		fprintf(stdout, "\nНевозможно создать сокет");
+		fprintf(stdout, "\nНевозможно создать сокет\n");
 		return 0; 
 	} 
 	if (connect(sd, (struct sockaddr *)&saddr, sizeof(saddr)) < 0){ 
-		fprintf(stdout,"\nНевозможно установить соединение с сервером");
-		return 0;
-	} 
-	num = send(sd, buf, sizeof(buf), 0); //послать сообщение серверу
-	if (num < 0) {
-		fprintf(stdout,"\nОшибка"); 
+		fprintf(stdout,"\nНевозможно установить соединение с сервером\n");
 		return 0;
 	}
-	num=recv(sd, buf, 60, 0); //получить ответ от сервера if
-	if (num<0) { 
-		fprintf(stdout,"\nОшибка") ; 
-		return 0 ; 
+	
+	int n = recv(sd, buf, sizeof(buf), 0);
+
+	while(n != 0){
+
+		cout << buf << endl;
+
+		cin.getline(buf, sizeof(buf));
+
+		send(sd, buf, sizeof(buf), 0);
+		
+		n = recv(sd, buf, sizeof(buf), 0);
+
 	}
-	else 
-		fprintf(stdout,"\nПолучен ответ%s", buf); 
+
+	close(sd);
 	return 1;
 }
