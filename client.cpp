@@ -10,8 +10,8 @@ int main(){
 	struct sockaddr_in saddr ; //адрес сервера
 	bzero(&saddr, sizeof(saddr)) ; //очистить адрес
 	saddr.sin_family=AF_INET ;
-	saddr.sin_port = 199;
-	saddr.sin_addr.s_addr=INADDR_ANY;
+	saddr.sin_port = 9199;
+	saddr.sin_addr.s_addr=0;
 	       
 	sd=socket(AF_INET, SOCK_STREAM, 0);
 	if (sd<0) { 
